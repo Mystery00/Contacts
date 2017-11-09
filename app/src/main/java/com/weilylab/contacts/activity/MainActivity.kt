@@ -1,10 +1,13 @@
-package com.weilylab.contacts
+package com.weilylab.contacts.activity
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.weilylab.contacts.ContactHelper
+import com.weilylab.contacts.ContactResponse
+import com.weilylab.contacts.R
 import com.weilylab.contacts.classes.Contact
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
