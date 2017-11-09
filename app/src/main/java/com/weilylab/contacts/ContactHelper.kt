@@ -32,4 +32,6 @@ class ContactHelper private constructor()
 			.baseUrl("http://192.168.1.105/Contacts/")
 			.addConverterFactory(GsonConverterFactory.create())
 			.build()
+
+	lateinit var username:String
 }

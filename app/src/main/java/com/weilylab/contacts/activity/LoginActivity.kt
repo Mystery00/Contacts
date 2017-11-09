@@ -22,17 +22,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
-import vip.mystery0.tools.logs.Logs
 
 /**
  * A login screen that offers login via email/password.
  */
 class LoginActivity : AppCompatActivity()
 {
-	companion object
-	{
-		private val TAG = "LoginActivity"
-	}
 
 	private val retrofit = ContactHelper.getInstance().retrofit
 	private lateinit var loginDialog: ZLoadingDialog
@@ -129,6 +124,7 @@ class LoginActivity : AppCompatActivity()
 				loginDialog.dismiss()
 				if (response.code == 0)
 				{
+					ContactHelper.getInstance().username = usernameStr
 					startActivity(Intent(this@LoginActivity, MainActivity::class.java))
 					finish()
 				}
@@ -148,15 +144,15 @@ class LoginActivity : AppCompatActivity()
 			val loginResult = loginCall.execute()
 			if (loginResult.isSuccessful)
 			{
-				val loginResponse=loginResult.body()!!
+				val loginResponse = loginResult.body()!!
 				subscriber.onNext(loginResponse)
-				if (loginResponse.code==1)
+				if (loginResponse.code == 1)
 				{
 					val registerCall = service.register(usernameStr, passwordStr)
 					val registerResult = registerCall.execute()
 					if (registerResult.isSuccessful)
 					{
-						val registerResponse=registerResult.body()!!
+						val registerResponse = registerResult.body()!!
 						subscriber.onNext(registerResponse)
 						subscriber.onComplete()
 					}

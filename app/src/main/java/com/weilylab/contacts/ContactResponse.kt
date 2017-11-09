@@ -13,6 +13,7 @@ import retrofit2.http.Query
  */
 interface ContactResponse
 {
+	@FormUrlEncoded
 	@POST("interface/getContactList.php")
 	fun getContactList(@Field("username") username: String): Call<Contact>
 

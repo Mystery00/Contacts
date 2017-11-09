@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity()
 
 		val observable = Observable.create<Contact>({
 			val service = ContactHelper.getInstance().retrofit.create(ContactResponse::class.java)
-			val call = service.getContactList("1231234")
+			val call = service.getContactList(ContactHelper.getInstance().username)
 			val response = call.execute()
 			Logs.i(TAG, "onCreate: "+response.isSuccessful)
 			if (response.isSuccessful)
