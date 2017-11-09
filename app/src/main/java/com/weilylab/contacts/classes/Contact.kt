@@ -1,9 +1,11 @@
 package com.weilylab.contacts.classes
 
+import java.io.Serializable
+
 /**
  * Created by myste.
  */
-class Contact
+class Contact:Serializable
 {
 	var contactID = 0
 	lateinit var contactName: String

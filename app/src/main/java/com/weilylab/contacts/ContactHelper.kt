@@ -33,5 +33,5 @@ class ContactHelper private constructor()
 			.addConverterFactory(GsonConverterFactory.create())
 			.build()
 
-	lateinit var username:String
+	lateinit var username: String
 }

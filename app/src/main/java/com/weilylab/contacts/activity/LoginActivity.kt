@@ -22,12 +22,17 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
+import vip.mystery0.tools.logs.Logs
 
 /**
  * A login screen that offers login via email/password.
  */
 class LoginActivity : AppCompatActivity()
 {
+	companion object
+	{
+		private val TAG = "LoginActivity"
+	}
 
 	private val retrofit = ContactHelper.getInstance().retrofit
 	private lateinit var loginDialog: ZLoadingDialog
@@ -39,8 +44,7 @@ class LoginActivity : AppCompatActivity()
 
 		loginDialog = ZLoadingDialog(this)
 				.setLoadingBuilder(Z_TYPE.STAR_LOADING)
-				.setHintText("logging in......")
-				.setHintTextSize(16F)
+				.setHintText("登录中......")
 
 		password.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
 			if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL)
@@ -105,11 +109,13 @@ class LoginActivity : AppCompatActivity()
 
 			override fun onSubscribe(d: Disposable)
 			{
+				Logs.i(TAG, "onSubscribe: ")
 				loginDialog.show()
 			}
 
 			override fun onNext(t: Response)
 			{
+				Logs.i(TAG, "onNext: " + t.code)
 				response = t
 			}
 
@@ -121,6 +127,7 @@ class LoginActivity : AppCompatActivity()
 
 			override fun onComplete()
 			{
+				Logs.i(TAG, "onComplete: ")
 				loginDialog.dismiss()
 				if (response.code == 0)
 				{
@@ -134,8 +141,6 @@ class LoginActivity : AppCompatActivity()
 							.show()
 				}
 			}
-
-
 		}
 
 		val observable = Observable.create<Response> { subscriber ->
@@ -146,6 +151,11 @@ class LoginActivity : AppCompatActivity()
 			{
 				val loginResponse = loginResult.body()!!
 				subscriber.onNext(loginResponse)
+				if (loginResponse.code == 0)
+				{
+					subscriber.onComplete()
+					return@create
+				}
 				if (loginResponse.code == 1)
 				{
 					val registerCall = service.register(usernameStr, passwordStr)
@@ -160,7 +170,9 @@ class LoginActivity : AppCompatActivity()
 					{
 						subscriber.onError(Exception("error"))
 					}
+					return@create
 				}
+				subscriber.onComplete()
 			}
 			else
 			{
